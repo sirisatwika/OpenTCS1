@@ -1,0 +1,62 @@
+apply plugin: 'java-library'
+apply plugin: 'jacoco'
+
+archivesBaseName = name.toLowerCase()
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
+
+  compileOnly group: 'javax.inject', name: 'javax.inject', version: '1'
+
+  compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+  testCompileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+
+  // For JUnit 4.x tests
+  testCompileOnly group: 'junit', name: 'junit', version: '4.13.2'
+  testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.8.2'
+  // For JUnit 5 tests
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
+  testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
+
+  testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+  testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.6.1'
+  testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.23.1'
+
+  testRuntimeOnly group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.36'
+}
+
+compileJava {
+  options.release = 13
+  options.compilerArgs << "-Xlint:all"
+  options.compilerArgs << "-Xlint:-serial"
+}
+
+compileTestJava {
+  options.release = 13
+  options.compilerArgs << "-Xlint:all"
+  options.compilerArgs << "-Xlint:-serial"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes, description: 'Creates a jar from the source files.') {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+test {
+  useJUnitPlatform()
+  ignoreFailures = true
+  systemProperties.put("java.awt.headless", "true")
+}
+
+ext {
+  // Attributes for the AsciiDoc documentation to include code from source files
+  javaSrcDir = sourceSets.main.java.srcDirs[0]
+  javaClassesDir = sourceSets.main.output.classesDirs
+  testSrcDir = sourceSets.test.java.srcDirs[0]
+}

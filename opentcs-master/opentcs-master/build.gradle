@@ -1,0 +1,158 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    // License plugin
+    classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
+    // Stats plugin
+    classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.2'
+    // JaCoCo log plugin
+    classpath 'gradle.plugin.org.barfuin.gradle.jacocolog:gradle-jacoco-log:2.0.0'
+  }
+}
+
+apply plugin: 'base' // To add "clean" task to the root project.
+apply plugin: 'distribution'
+apply plugin: 'org.barfuin.gradle.jacocolog'
+
+apply from: "${rootDir}/gradle/common.gradle"
+apply from: "${rootDir}/gradle/publishing-common.gradle"
+
+subprojects {
+  apply from: rootProject.file('gradle/common.gradle')
+}
+
+evaluationDependsOnChildren()
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+distributions {
+  main {
+    contents.from {
+      project(':openTCS-Kernel').ext.collectableDistDir
+    }
+    contents.from {
+      project(':openTCS-KernelControlCenter').ext.collectableDistDir
+    }
+    contents.from {
+      project(':openTCS-ModelEditor').ext.collectableDistDir
+    }
+    contents.from {
+      project(':openTCS-OperationsDesk').ext.collectableDistDir
+    }
+    contents.from {
+      project(':openTCS-Documentation').ext.collectableDistDir
+    }
+  }
+}
+
+task statsAggregate(type: org.kordamp.gradle.stats.AggregateStatsReportTask) {
+  dependsOn subprojects*.stats
+}
+
+task subDists {
+  dependsOn(':openTCS-Kernel:installDist')
+  dependsOn(':openTCS-KernelControlCenter:installDist')
+  dependsOn(':openTCS-ModelEditor:installDist')
+  dependsOn(':openTCS-OperationsDesk:installDist')
+  dependsOn(':openTCS-Documentation:installDist')
+}
+
+installDist.dependsOn subDists
+
+distZip {
+  classifier = 'bin'
+  dependsOn subDists
+}
+
+distTar {
+  classifier = 'bin'
+  dependsOn subDists
+  compression = Compression.GZIP
+}
+
+task distSrcZip(type: Zip) {
+  classifier = 'src'
+  from "${rootDir}"
+
+  includes << 'config/**'
+  includes << 'gradle/**'
+  includes << 'openTCS-*/**'
+  includes << 'src/**'
+  includes << '.nb-gradle-properties'
+  includes << '*.gradle'
+  includes << 'gradlew'
+  includes << 'gradlew.bat'
+
+  excludes << '.codeclimate.yml'
+  excludes << '.gitlab'
+  excludes << '.gitlab-ci.yml'
+  excludes << '.gradle'
+  excludes << '**/build'
+}
+
+artifacts {
+  archives distZip
+  archives distSrcZip
+}
+
+build {
+  dependsOn subprojects*.build
+  dependsOn installDist
+}
+
+task release {
+  dependsOn build
+  dependsOn subprojects*.release
+  dependsOn distZip
+  dependsOn distSrcZip
+}
+
+publish.dependsOn subprojects*.publish
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      artifact distZip
+      artifact distSrcZip
+
+      pom {
+        artifactId = 'opentcs'
+
+        name = project.name
+        description = project.name
+        url = "https://www.opentcs.org"
+
+        licenses {
+          license {
+            name = "MIT License"
+            url = "http://www.opensource.org/licenses/mit-license.php"
+          }
+        }
+
+        developers {
+          developer {
+            name = "The openTCS Authors"
+            email = "info@opentcs.org"
+            organization = "The open Transportation Control System"
+            organizationUrl = "https://www.opentcs.org/"
+          }
+        }
+
+        scm {
+          connection = "scm:git:git://github.com/opentcs/opentcs.git"
+          developerConnection = "scm:git:ssh://github.com:opentcs/opentcs.git"
+          url = "https://github.com/opentcs/opentcs"
+        }
+      }
+    }
+  }
+}
