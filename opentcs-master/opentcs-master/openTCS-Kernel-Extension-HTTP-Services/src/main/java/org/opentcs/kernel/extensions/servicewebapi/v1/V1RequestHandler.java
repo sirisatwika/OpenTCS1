@@ -15,6 +15,7 @@ import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 import javax.inject.Inject;
 import org.opentcs.access.KernelRuntimeException;
+import org.opentcs.customizations.kernel.KernelInjectionModule;
 import org.opentcs.data.ObjectExistsException;
 import org.opentcs.data.ObjectUnknownException;
 import org.opentcs.kernel.extensions.servicewebapi.HttpConstants;
@@ -22,14 +23,18 @@ import org.opentcs.kernel.extensions.servicewebapi.RequestHandler;
 import org.opentcs.kernel.extensions.servicewebapi.v1.order.OrderHandler;
 import org.opentcs.kernel.extensions.servicewebapi.v1.order.binding.Job;
 import org.opentcs.kernel.extensions.servicewebapi.v1.order.binding.Transport;
+import org.opentcs.kernel.extensions.servicewebapi.v1.order.binding.VehicleC;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.RequestStatusHandler;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.StatusEventDispatcher;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.PeripheralJobState;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.TransportOrderState;
+import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.VehicleState;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Service;
+//import org.opentcs.strategies.basic.routing.DefaultRouterModule;
+//import org.opentcs.strategies.basic.routing.jgrapht.ShortestPathConfiguration.Algorithm;
 
 /**
  * Handles requests and produces responses for version 1 of the web API.
@@ -37,7 +42,7 @@ import spark.Service;
  * @author Stefan Walter (Fraunhofer IML)
  */
 public class V1RequestHandler
-    implements RequestHandler {
+    implements RequestHandler  {
 
   /**
    * Maps between objects and their JSON representations.
@@ -131,23 +136,46 @@ public class V1RequestHandler
                  this::handlePostPeripheralJobsByName);
     service.post("/peripheralJobs/dispatcher/trigger",
                  this::handlePostPeripheralJobsDispatchTrigger);
-    service.post("/createVehicle/:NAME",
-                 this::handlePostVehicle);
+    /*service.get("/pathalgo",
+                this::getalgorithmused);*/
+    /*service.post("/createVehicle/:NAME",
+                 this::handlePostVehicle);*/
+    service.get("/location",
+                  this::getlocation);
+    service.put("/vehicles/:NAME/temperature",
+                this::putTemperature);
+    
+    
   }   
-  private Object handlePostVehicle(Request request, Response response)
+  private Object putTemperature(Request request, Response response)
+      throws ObjectUnknownException, IllegalArgumentException {
+    statusInformationProvider.putVehicleTemperature(
+        request.params(":NAME"),
+        fromJson(request.body() ,Integer.class)
+    );
+    response.type(HttpConstants.CONTENT_TYPE_TEXT_PLAIN_UTF8);
+    return "";
+  }
+ /*private Object handlePostVehicle(Request request, Response response) 
       throws ObjectUnknownException,
              ObjectExistsException,
              IllegalArgumentException,
              IllegalStateException {
     response.type(HttpConstants.CONTENT_TYPE_APPLICATION_JSON_UTF8);
     return toJson(
-        TransportOrderState.fromTransportOrder(
-            orderHandler.createOrder(request.params(":NAME"),
-                                     fromJson(request.body(), Transport.class))
+        VehicleState.fromVehicle(
+            orderHandler.createVehicle(request.params(":NAME"),
+                                     fromJson(request.body(), VehicleC.class))
         )
     );
-  }
-
+  }*/
+/*private Object getalgorithmused(Request request, Response response) {
+  response.type(HttpConstants.CONTENT_TYPE_TEXT_PLAIN_UTF8);  
+  ShortestPathConfiguration spConfiguration
+        = getConfigBindingProvider().get(ShortestPathConfiguration.PREFIX,
+                                         ShortestPathConfiguration.class);
+    return spConfiguration;
+  }*/
   
   private Object handlePostDispatcherTrigger(Request request, Response response)
       throws KernelRuntimeException {
@@ -216,6 +244,14 @@ public class V1RequestHandler
     return toJson(
         statusInformationProvider.getVehiclesState(valueIfKeyPresent(request.queryMap(),
                                                                      "procState"))
+    );
+  }
+  
+  private Object getlocation(Request request, Response response)
+      throws IllegalArgumentException {
+    response.type(HttpConstants.CONTENT_TYPE_APPLICATION_JSON_UTF8);
+    return toJson(
+        statusInformationProvider.getlocation()
     );
   }
 
@@ -350,4 +386,6 @@ public class V1RequestHandler
   }
 
   
+
+    
 }

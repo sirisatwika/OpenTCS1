@@ -12,6 +12,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import javax.inject.Inject;
 import org.opentcs.access.KernelRuntimeException;
+import org.opentcs.access.to.order.VehicleCreationTO;
 import org.opentcs.components.kernel.services.InternalVehicleService;
 import org.opentcs.components.kernel.services.TCSObjectService;
 import org.opentcs.components.kernel.services.VehicleService;
@@ -277,6 +278,14 @@ public class StandardVehicleService
       return attachmentManager.getAttachmentInformation(ref.getName());
     }
   }
+  
+ /*@Override
+  public Vehicle createVehicle(VehicleCreationTO to) 
+      throws ObjectUnknownException {
+    synchronized (globalSyncObject) {
+      return attachmentManager.createVehicle(to.getName());
+    }
+  }*/
 
   @Override
   public VehicleProcessModelTO fetchProcessModel(TCSObjectReference<Vehicle> ref)
@@ -332,6 +341,26 @@ public class StandardVehicleService
     }
   }
 
+  @Override
+  public void updateVehicleTemperature(TCSObjectReference<Vehicle> ref,
+                                            int temp)
+      throws ObjectUnknownException, KernelRuntimeException {
+    synchronized (globalSyncObject) {
+      //Vehicle vehicle = fetchObject(Vehicle.class, ref);
+
+//      if (vehicle.isProcessingOrder()
+//          && (integrationLevel == Vehicle.IntegrationLevel.TO_BE_IGNORED
+//              || integrationLevel == Vehicle.IntegrationLevel.TO_BE_NOTICED)) {
+//        throw new IllegalArgumentException(
+//            String.format("%s: Cannot change integration level to %s while processing orders.",
+//                          vehicle.getName(),
+//                          integrationLevel.name())
+//        );
+//      }
+
+      model.setVehicleTemperature(ref, temp);
+    }
+  }
   @Override
   public void updateVehiclePaused(TCSObjectReference<Vehicle> ref, boolean paused)
       throws ObjectUnknownException, KernelRuntimeException {

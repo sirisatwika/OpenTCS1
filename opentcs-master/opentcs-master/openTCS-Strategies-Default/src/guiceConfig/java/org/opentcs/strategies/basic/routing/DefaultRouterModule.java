@@ -22,6 +22,7 @@ import org.opentcs.strategies.basic.routing.jgrapht.DijkstraPointRouterFactory;
 import org.opentcs.strategies.basic.routing.jgrapht.FloydWarshallPointRouterFactory;
 import org.opentcs.strategies.basic.routing.jgrapht.ModelGraphMapper;
 import org.opentcs.strategies.basic.routing.jgrapht.ShortestPathConfiguration;
+import org.opentcs.strategies.basic.routing.jgrapht.ShortestPathConfiguration.Algorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

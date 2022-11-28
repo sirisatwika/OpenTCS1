@@ -18,9 +18,11 @@ import org.opentcs.components.kernel.services.TransportOrderService;
 import org.opentcs.components.kernel.services.VehicleService;
 import org.opentcs.customizations.kernel.KernelExecutor;
 import org.opentcs.data.ObjectUnknownException;
+import org.opentcs.data.model.Location;
 import org.opentcs.data.model.Vehicle;
 import org.opentcs.data.order.TransportOrder;
 import org.opentcs.data.peripherals.PeripheralJob;
+import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.Locationstate;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.PeripheralJobState;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.TransportOrderState;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.VehicleState;
@@ -165,6 +167,14 @@ public class RequestStatusHandler {
         .collect(Collectors.toList());
     return vehicles;
   }
+  
+ public List<Locationstate> getlocation() {
+    List<Locationstate> locations = orderService.fetchObjects(Location.class)
+        .stream()
+        .map(location -> Locationstate.fromlocation(location))
+        .collect(Collectors.toList());
+    return locations;
+  }
 
   /**
    * Finds the vehicle with the given name.
@@ -200,6 +210,23 @@ public class RequestStatusHandler {
         () -> vehicleService.updateVehicleIntegrationLevel(vehicle.getReference(), level)
     );
   }
+  
+  public void putVehicleTemperature(String name,int value)
+      throws ObjectUnknownException, IllegalArgumentException {
+    requireNonNull(name, "name");
+    requireNonNull(value, "value");
+
+    Vehicle vehicle = orderService.fetchObject(Vehicle.class, name);
+    if (vehicle == null) {
+      throw new ObjectUnknownException("Unknown vehicle: " + name);
+    }
+    
+    kernelExecutor.submit(
+        () -> vehicleService.updateVehicleTemperature(vehicle.getReference(), value)
+    );
+  }
+  
+  
 
   public void putVehiclePaused(String name, String value)
       throws ObjectUnknownException, IllegalArgumentException {

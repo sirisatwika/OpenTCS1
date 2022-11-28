@@ -10,7 +10,9 @@ package org.opentcs.access.rmi.services;
 import java.rmi.RemoteException;
 import java.util.Set;
 import org.opentcs.access.KernelRuntimeException;
+//import org.opentcs.access.to.order.VehicleCreationTO;
 import org.opentcs.components.kernel.services.VehicleService;
+import org.opentcs.data.ObjectExistsException;
 import org.opentcs.data.ObjectUnknownException;
 import org.opentcs.data.TCSObjectReference;
 import org.opentcs.data.model.Vehicle;
@@ -18,6 +20,7 @@ import org.opentcs.drivers.vehicle.AdapterCommand;
 import org.opentcs.drivers.vehicle.VehicleCommAdapterDescription;
 import org.opentcs.drivers.vehicle.management.AttachmentInformation;
 import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
+import org.opentcs.access.to.order.VehicleCreationTO;
 
 /**
  * The default implementation of the vehicle service.
@@ -28,7 +31,7 @@ import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
 class RemoteVehicleServiceProxy
     extends RemoteTCSObjectServiceProxy<RemoteVehicleService>
     implements VehicleService {
-
+  
   @Override
   public void attachCommAdapter(TCSObjectReference<Vehicle> ref,
                                 VehicleCommAdapterDescription description)
@@ -81,6 +84,20 @@ class RemoteVehicleServiceProxy
       throw findSuitableExceptionFor(ex);
     }
   }
+  
+  /*@Override
+  public Vehicle createVehicle(VehicleCreationTO to)
+      throws ObjectUnknownException, KernelRuntimeException {
+    checkServiceAvailability();
+
+    try {
+      return getRemoteService().createVehicle(getClientId(), to);
+    }
+    catch (RemoteException ex) {
+      throw findSuitableExceptionFor(ex);
+    }
+  }*/
+   
 
   @Override
   public VehicleProcessModelTO fetchProcessModel(TCSObjectReference<Vehicle> ref)
@@ -134,6 +151,20 @@ class RemoteVehicleServiceProxy
       throw findSuitableExceptionFor(ex);
     }
   }
+  @Override
+  public void updateVehicleTemperature(TCSObjectReference<Vehicle> ref,
+                                            int temp)
+      throws ObjectUnknownException, KernelRuntimeException {
+    checkServiceAvailability();
+
+    try {
+      getRemoteService().updateVehicleTemperature(getClientId(), ref, temp);
+    }
+    catch (RemoteException ex) {
+      throw findSuitableExceptionFor(ex);
+    }
+  }
+  
 
   @Override
   public void updateVehiclePaused(TCSObjectReference<Vehicle> ref, boolean paused)

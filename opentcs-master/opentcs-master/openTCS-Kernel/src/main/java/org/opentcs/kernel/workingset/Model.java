@@ -640,6 +640,14 @@ public class Model {
                                TCSObjectEvent.Type.OBJECT_MODIFIED);
     return vehicle;
   }
+  
+  public Vehicle setVehicleTemperature(TCSObjectReference<Vehicle> ref,
+                                            int temp)
+      throws ObjectUnknownException {
+    Vehicle vehicle = objectPool.getObject(Vehicle.class, ref);
+        vehicle = objectPool.replaceObject(vehicle.withTemperature(temp));
+    return vehicle;
+  }
 
   /**
    * Sets a vehicle's paused state.

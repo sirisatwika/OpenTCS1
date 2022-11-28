@@ -366,7 +366,7 @@ public class Path
                     peripheralOperations,
                     locked,
                     layout);
-  }
+   }
 
   /**
    * Checks whether this path is navigable in forward direction.

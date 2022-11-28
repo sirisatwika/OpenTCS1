@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import org.opentcs.access.KernelRuntimeException;
 import org.opentcs.access.to.order.DestinationCreationTO;
 import org.opentcs.access.to.order.TransportOrderCreationTO;
+import org.opentcs.access.to.order.VehicleCreationTO;
 import org.opentcs.access.to.peripherals.PeripheralJobCreationTO;
 import org.opentcs.access.to.peripherals.PeripheralOperationCreationTO;
 import org.opentcs.components.kernel.services.DispatcherService;
@@ -32,13 +33,17 @@ import org.opentcs.customizations.kernel.KernelExecutor;
 import org.opentcs.data.ObjectExistsException;
 import org.opentcs.data.ObjectUnknownException;
 import org.opentcs.data.model.Location;
-import org.opentcs.data.model.Vehicle;
+
 import org.opentcs.data.order.TransportOrder;
 import org.opentcs.data.peripherals.PeripheralJob;
 import org.opentcs.kernel.extensions.servicewebapi.v1.order.binding.Destination;
 import org.opentcs.kernel.extensions.servicewebapi.v1.order.binding.Job;
 import org.opentcs.kernel.extensions.servicewebapi.v1.order.binding.Property;
 import org.opentcs.kernel.extensions.servicewebapi.v1.order.binding.Transport;
+import org.opentcs.components.kernel.services.VehicleService;
+import org.opentcs.data.model.Vehicle;
+import org.opentcs.kernel.extensions.servicewebapi.v1.order.binding.VehicleC;
+
 
 /**
  * Handles requests for creating or withdrawing transport orders.
@@ -130,24 +135,22 @@ public class OrderHandler {
     }
   }
 
- /* public Vehicle createVehicle(String name, Transport order)
+  /*public Vehicle createVehicle(String name, VehicleC vehicleC)
       throws ObjectUnknownException,
              ObjectExistsException,
              KernelRuntimeException,
              IllegalStateException {
-    requireNonNull(name, "name");
-    requireNonNull(order, "order");
+        requireNonNull(name, "name");
+    requireNonNull(vehicleC, "vehiclec");
 
-    TransportOrderCreationTO to
-        = new TransportOrderCreationTO(name, destinations(order))
-            .withIncompleteName(order.hasIncompleteName())
-            .withIntendedVehicleName(order.getIntendedVehicle())
-            .withDeadline(deadline(order));
-            
+    VehicleCreationTO to
+        = new VehicleCreationTO(name,vehicleC.getMaxVelocity(),vehicleC.getEnergyLevel())
+            .withmaxVelocity(vehicleC.getMaxVelocity())
+            .withenergyLevel(vehicleC.getEnergyLevel());
     try {
       return kernelExecutor.submit(
           () -> {
-            TransportOrder result = orderService.createTransportOrder(to);
+            Vehicle result = vehicleService.createVehicle(to);
             return result;
           }
       ).get();

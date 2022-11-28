@@ -9,6 +9,8 @@ package org.opentcs.components.kernel.services;
 
 import java.util.Set;
 import org.opentcs.access.KernelRuntimeException;
+import org.opentcs.access.to.order.VehicleCreationTO;
+import org.opentcs.data.ObjectExistsException;
 import org.opentcs.data.ObjectUnknownException;
 import org.opentcs.data.TCSObjectReference;
 import org.opentcs.data.model.Vehicle;
@@ -26,6 +28,7 @@ import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
 public interface VehicleService
     extends TCSObjectService {
 
+ 
   /**
    * Attaches the described comm adapter to the referenced vehicle.
    *
@@ -123,6 +126,10 @@ public interface VehicleService
                                      Vehicle.IntegrationLevel integrationLevel)
       throws ObjectUnknownException, KernelRuntimeException, IllegalArgumentException;
   
+  void updateVehicleTemperature(TCSObjectReference<Vehicle> ref,
+                                     int temperature)
+      throws ObjectUnknownException, KernelRuntimeException, IllegalArgumentException;
+  
   /**
    * Updates the vehicle's paused state.
    *
@@ -134,6 +141,9 @@ public interface VehicleService
   void updateVehiclePaused(TCSObjectReference<Vehicle> ref,
                            boolean paused)
       throws ObjectUnknownException, KernelRuntimeException;
+ 
+ /* Vehicle createVehicle(VehicleCreationTO to)
+      throws ObjectUnknownException, ObjectExistsException, KernelRuntimeException;*/
 
   /**
    * Updates the types of transport orders a vehicle is allowed to process.

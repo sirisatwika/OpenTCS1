@@ -1035,6 +1035,39 @@ public class Vehicle
                        current,
                        temperature);
   }
+public Vehicle withTemperature(int temperature) {
+    return new Vehicle(getName(),
+                       getProperties(),
+                       getHistory(),
+                       length,
+                       energyLevelGood,
+                       energyLevelCritical,
+                       energyLevelFullyRecharged,
+                       energyLevelSufficientlyRecharged,
+                       maxVelocity,
+                       maxReverseVelocity,
+                       rechargeOperation,
+                       procState,
+                       transportOrder,
+                       orderSequence,
+                       allowedOrderTypes,
+                       routeProgressIndex,
+                       claimedResources,
+                       allocatedResources,
+                       state,
+                       integrationLevel,
+                       paused,
+                       currentPosition,
+                       nextPosition,
+                       precisePosition,
+                       orientationAngle,
+                       energyLevel,
+                       loadHandlingDevices,
+                       layout,
+                       voltage,
+                       current,
+                       temperature);
+  }
 
   /**
    * Indicates whether this vehicle is paused.

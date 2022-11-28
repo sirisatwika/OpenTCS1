@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import org.opentcs.access.to.order.VehicleCreationTO;
 import org.opentcs.components.Lifecycle;
 import org.opentcs.components.kernel.services.TCSObjectService;
 import org.opentcs.customizations.ApplicationEventBus;
@@ -320,6 +321,13 @@ public class AttachmentManager
     return objectService.fetchObjects(Vehicle.class).stream()
         .filter(updatedVehicle -> Objects.equals(updatedVehicle.getName(), vehicle.getName()))
         .findFirst().orElse(vehicle);
+  }
+  
+  private Vehicle createVehicle(@Nonnull VehicleCreationTO vehicle) {
+    requireNonNull(vehicle, "vehicle");
+
+    //return objectService.fetchObjects(VehicleCreationTO);
+  return null;
   }
 
   private void autoEnableAllAdapters() {

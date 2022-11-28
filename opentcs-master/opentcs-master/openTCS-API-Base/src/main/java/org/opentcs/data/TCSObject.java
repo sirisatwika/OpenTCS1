@@ -248,7 +248,7 @@ public abstract class TCSObject<E extends TCSObject<E>>
    * @return A new list with the values from the given list but all <code>null</code> values
    * removed.
    */
-  protected static final <V> List<V> listWithoutNullValues(List<V> original) {
+  public static final <V> List<V> listWithoutNullValues(List<V> original) {
     requireNonNull(original, "original");
 
     return original.stream()

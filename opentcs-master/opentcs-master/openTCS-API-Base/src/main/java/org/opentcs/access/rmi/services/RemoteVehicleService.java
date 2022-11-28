@@ -11,6 +11,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Set;
 import org.opentcs.access.rmi.ClientID;
+import org.opentcs.access.to.order.VehicleCreationTO;
 import org.opentcs.components.kernel.services.VehicleService;
 import org.opentcs.data.TCSObjectReference;
 import org.opentcs.data.model.Vehicle;
@@ -54,6 +55,8 @@ public interface RemoteVehicleService
                                                    TCSObjectReference<Vehicle> ref)
       throws RemoteException;
 
+ /* Vehicle createVehicle(ClientID clientId,VehicleCreationTO to) throws RemoteException;*/
+  
   VehicleProcessModelTO fetchProcessModel(ClientID clientId, TCSObjectReference<Vehicle> ref)
       throws RemoteException;
 
@@ -70,6 +73,11 @@ public interface RemoteVehicleService
   void updateVehicleIntegrationLevel(ClientID clientId,
                                      TCSObjectReference<Vehicle> ref,
                                      Vehicle.IntegrationLevel integrationLevel)
+      throws RemoteException;
+  
+  void updateVehicleTemperature(ClientID clientId,
+                                     TCSObjectReference<Vehicle> ref,
+                                     int temp)
       throws RemoteException;
 
   void updateVehiclePaused(ClientID clientId,
