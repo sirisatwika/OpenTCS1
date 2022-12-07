@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model version="0.0.4" name="pathmodel">
+    <point name="Point-0001" xPosition="18500" yPosition="19000" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="Point-0001 --- Point-0002"/>
+        <outgoingPath name="Point-0001 --- Point-0005"/>
+        <pointLayout xPosition="20750" yPosition="21750" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="Point-0002" xPosition="11500" yPosition="13000" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="Point-0002 --- Point-0008"/>
+        <pointLayout xPosition="11750" yPosition="13250" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="Point-0003" xPosition="18500" yPosition="6500" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="Point-0003 --- Point-0002"/>
+        <outgoingPath name="Point-0003 --- Point-0006"/>
+        <outgoingPath name="Point-0003 --- Point-0007"/>
+        <outgoingPath name="Point-0003 --- Point-0008"/>
+        <pointLayout xPosition="16250" yPosition="7250" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="Point-0004" xPosition="28000" yPosition="11500" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="Point-0004 --- Point-0005"/>
+        <pointLayout xPosition="29750" yPosition="9750" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="Point-0005" xPosition="29500" yPosition="19500" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <pointLayout xPosition="29500" yPosition="19500" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="Point-0006" xPosition="25000" yPosition="14500" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="Point-0006 --- Point-0004"/>
+        <outgoingPath name="Point-0006 --- Point-0005"/>
+        <pointLayout xPosition="26750" yPosition="12750" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="Point-0007" xPosition="22500" yPosition="4000" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="Point-0007 --- Point-0004"/>
+        <pointLayout xPosition="24250" yPosition="6250" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="Point-0008" xPosition="19000" yPosition="15000" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="Point-0008 --- Point-0001"/>
+        <outgoingPath name="Point-0008 --- Point-0005"/>
+        <outgoingPath name="Point-0008 --- Point-0006"/>
+        <pointLayout xPosition="22250" yPosition="15750" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <path name="Point-0001 --- Point-0002" sourcePoint="Point-0001" destinationPoint="Point-0002" length="9220" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0001 --- Point-0005" sourcePoint="Point-0001" destinationPoint="Point-0005" length="11011" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0002 --- Point-0008" sourcePoint="Point-0002" destinationPoint="Point-0008" length="7762" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0003 --- Point-0002" sourcePoint="Point-0003" destinationPoint="Point-0002" length="9552" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0003 --- Point-0006" sourcePoint="Point-0003" destinationPoint="Point-0006" length="10308" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0003 --- Point-0007" sourcePoint="Point-0003" destinationPoint="Point-0007" length="4717" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0003 --- Point-0008" sourcePoint="Point-0003" destinationPoint="Point-0008" length="8515" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0004 --- Point-0005" sourcePoint="Point-0004" destinationPoint="Point-0005" length="8139" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0006 --- Point-0004" sourcePoint="Point-0006" destinationPoint="Point-0004" length="4243" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0006 --- Point-0005" sourcePoint="Point-0006" destinationPoint="Point-0005" length="6727" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0007 --- Point-0004" sourcePoint="Point-0007" destinationPoint="Point-0004" length="9301" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0008 --- Point-0001" sourcePoint="Point-0008" destinationPoint="Point-0001" length="4031" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0008 --- Point-0005" sourcePoint="Point-0008" destinationPoint="Point-0005" length="11424" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="Point-0008 --- Point-0006" sourcePoint="Point-0008" destinationPoint="Point-0006" length="6021" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <vehicle name="Vehicle-0001" length="1000" energyLevelCritical="30" energyLevelGood="90" energyLevelFullyRecharged="30" energyLevelSufficientlyRecharged="90" maxVelocity="1000" maxReverseVelocity="1000">
+        <vehicleLayout color="#FF0000"/>
+    </vehicle>
+    <vehicle name="Vehicle-0002" length="1000" energyLevelCritical="30" energyLevelGood="90" energyLevelFullyRecharged="30" energyLevelSufficientlyRecharged="90" maxVelocity="1000" maxReverseVelocity="1000">
+        <vehicleLayout color="#0000FF"/>
+    </vehicle>
+    <locationType name="LType-0001">
+        <allowedOperation name="load"/>
+        <property name="tcs:defaultLocationTypeSymbol" value="LOAD_TRANSFER_GENERIC"/>
+        <locationTypeLayout locationRepresentation="LOAD_TRANSFER_GENERIC"/>
+    </locationType>
+    <locationType name="LType-0002">
+        <allowedOperation name="charge"/>
+        <property name="tcs:defaultLocationTypeSymbol" value="RECHARGE_GENERIC"/>
+        <locationTypeLayout locationRepresentation="RECHARGE_GENERIC"/>
+    </locationType>
+    <location name="Location-0001" xPosition="5000" yPosition="14500" zPosition="0" locked="false" type="LType-0001">
+        <link point="Point-0002"/>
+        <property name="tcs:defaultLocationSymbol" value="DEFAULT"/>
+        <locationLayout xPosition="5000" yPosition="14500" xLabelOffset="-10" yLabelOffset="-20" locationRepresentation="DEFAULT" layerId="0"/>
+    </location>
+    <location name="Location-0002" xPosition="36500" yPosition="20500" zPosition="0" locked="false" type="LType-0002">
+        <link point="Point-0005"/>
+        <property name="tcs:defaultLocationSymbol" value="DEFAULT"/>
+        <locationLayout xPosition="36500" yPosition="20500" xLabelOffset="-10" yLabelOffset="-20" locationRepresentation="DEFAULT" layerId="0"/>
+    </location>
+    <visualLayout name="VLayout" scaleX="50.0" scaleY="50.0">
+        <layer id="0" ordinal="0" visible="true" name="Default layer" groupId="0"/>
+        <layerGroup id="0" name="Default layer group" visible="true"/>
+    </visualLayout>
+    <property name="tcs:modelFileLastModified" value="2022-12-07T06:40:55Z"/>
+</model>

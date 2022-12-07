@@ -7,6 +7,7 @@
  */
 package org.opentcs.kernel.extensions.servicewebapi.v1.status;
 
+import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ExecutorService;
@@ -19,10 +20,12 @@ import org.opentcs.components.kernel.services.VehicleService;
 import org.opentcs.customizations.kernel.KernelExecutor;
 import org.opentcs.data.ObjectUnknownException;
 import org.opentcs.data.model.Location;
+import org.opentcs.data.model.LocationType;
 import org.opentcs.data.model.Vehicle;
 import org.opentcs.data.order.TransportOrder;
 import org.opentcs.data.peripherals.PeripheralJob;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.Locationstate;
+//import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.Locationstatetype;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.PeripheralJobState;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.TransportOrderState;
 import org.opentcs.kernel.extensions.servicewebapi.v1.status.binding.VehicleState;
@@ -169,12 +172,32 @@ public class RequestStatusHandler {
   }
   
  public List<Locationstate> getlocation() {
-    List<Locationstate> locations = orderService.fetchObjects(Location.class)
+   List<Locationstate> locop = new ArrayList<>();
+   List<Locationstate> locations = orderService.fetchObjects(Location.class)
         .stream()
         .map(location -> Locationstate.fromlocation(location))
         .collect(Collectors.toList());
-    return locations;
+    for(int i=0;i<locations.size();i++){
+      Locationstate ls = locations.get(i);
+      List<String> operation = orderService.fetchObject(LocationType.class,ls.getLocationType()).getAllowedOperations();
+//      ls.setOperation(operation);
+      //locations.set(i, ls);
+      System.out.println(operation);
+      for(int j=0;j<operation.size();j++){
+        String op = operation.get(j);
+        Locationstate ltemp = new Locationstate();
+        ltemp.setLocationName(ls.getLocationName());
+        ltemp.setLocationType(ls.getLocationType());
+        ltemp.setOperation(op);
+        System.out.println(ltemp);
+
+        locop.add(ltemp);
+      }
+      
+    }
+    return locop;
   }
+ 
 
   /**
    * Finds the vehicle with the given name.

@@ -66,8 +66,9 @@ public abstract class AbstractPointRouterFactory
     Graph<String, Edge> graph = mapper.translateModel(points,
                                                            objectService.fetchObjects(Path.class),
                                                            vehicle);
-
-    PointRouter router = new ShortestPathPointRouter(createShortestPathAlgorithm(graph), points);
+   // Set<Vehicle> vehicles = objectService.fetchObjects(Vehicle.class);
+   
+    PointRouter router = new ShortestPathPointRouter(createShortestPathAlgorithm(graph),graph, points,objectService);
     // Make a single request for a route from one point to a different one to make sure the
     // point router is primed. (Some implementations are initialized lazily.)
     if (points.size() >= 2) {
@@ -81,6 +82,8 @@ public abstract class AbstractPointRouterFactory
 
     return router;
   }
+  
+  
 
   /**
    * Returns a shortest path algorithm implementation working on the given graph.

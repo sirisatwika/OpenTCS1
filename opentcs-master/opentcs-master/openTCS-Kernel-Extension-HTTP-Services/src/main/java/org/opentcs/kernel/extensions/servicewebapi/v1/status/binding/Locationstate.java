@@ -15,16 +15,25 @@ import java.util.HashSet;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
+import javax.inject.Inject;
 import org.opentcs.access.to.model.LocationTypeCreationTO;
+import org.opentcs.components.kernel.services.TransportOrderService;
+import org.opentcs.components.kernel.services.VehicleService;
+import org.opentcs.customizations.kernel.KernelExecutor;
 import org.opentcs.data.model.Location;
 import org.opentcs.data.model.Location.Link;
+import org.opentcs.data.model.LocationType;
 
 /**
  *
  * @author 40018799
  */
 public class Locationstate {
-  
+    
+   
+
   @JsonProperty(required = true)
   @JsonPropertyDescription("The name of the destination location")
   private String locationName = "";
@@ -34,9 +43,9 @@ public class Locationstate {
   private String locationType = "";
   
 
-//  @JsonProperty(required = true)
-//  @JsonPropertyDescription("The destination operation")
-//  private Set<String> operation = new HashSet<>();
+  @JsonProperty(required = true)
+  @JsonPropertyDescription("The destination operation")
+  private String operation = "";
 
   public String getLocationName() {
     return locationName;
@@ -55,28 +64,32 @@ public class Locationstate {
     this.locationName = locationName;
   }
 
-//  public Set<String> getOperation() {
-//    return operation;
-//  }
-//
-//  public void setOperation(Set<String> operation) {
-//    this.operation = requireNonNull(operation, "operation");
-//  }
+  public String getOperation() {
+    return operation;
+  }
+
+  public void setOperation(String operation) {
+    this.operation = operation;
+  }
+
+ 
   public static Locationstate fromlocation(Location location) {
     if (location == null) {
       return null;
     }
     Locationstate locationstate = new Locationstate();
-    Set<String> operations = new HashSet<>();
-//    for(Link l:location.getAttachedLinks()){
-//      for(String op:l.getAllowedOperations()){
-//        operations.add(op);
-//      }
-//    }
-    locationstate.setLocationName(location.getName());
-   // locationstate.setOperation(operations);
-   locationstate.setLocationType(location.getType().getName());
     
+   locationstate.setLocationName(location.getName());
+   locationstate.setLocationType(location.getType().getName());
+        
     return locationstate;
   } 
+
+  @Override
+  public String toString() {
+    return "Locationstate{" + "locationName=" + locationName + ", locationType=" + locationType + ", operation=" + operation + '}';
+  }
+
+  public Locationstate() {
+  }
 }

@@ -254,6 +254,7 @@ public class V1RequestHandler
         statusInformationProvider.getlocation()
     );
   }
+  
 
   private Object handleGetVehicleByName(Request request, Response response)
       throws ObjectUnknownException {
