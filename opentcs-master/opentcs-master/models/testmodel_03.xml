@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model version="0.0.4" name="testModel_7">
+    <point name="charging station point" xPosition="22500" yPosition="4500" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="charging station point --- unloading station point"/>
+        <outgoingPath name="charging station point --- working station point"/>
+        <pointLayout xPosition="22500" yPosition="4500" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="loading station point" xPosition="13500" yPosition="13500" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="loading station point --- charging station point"/>
+        <outgoingPath name="loading station point --- unloading station point"/>
+        <pointLayout xPosition="13500" yPosition="13500" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="unloading station point" xPosition="31500" yPosition="13500" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="unloading station point --- working station point"/>
+        <pointLayout xPosition="31250" yPosition="13750" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <point name="working station point" xPosition="21500" yPosition="21500" zPosition="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
+        <outgoingPath name="working station point --- loading station point"/>
+        <pointLayout xPosition="22250" yPosition="21750" xLabelOffset="-10" yLabelOffset="-20" layerId="0"/>
+    </point>
+    <path name="charging station point --- unloading station point" sourcePoint="charging station point" destinationPoint="unloading station point" length="12728" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="charging station point --- working station point" sourcePoint="charging station point" destinationPoint="working station point" length="17029" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="loading station point --- charging station point" sourcePoint="loading station point" destinationPoint="charging station point" length="12728" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="loading station point --- unloading station point" sourcePoint="loading station point" destinationPoint="unloading station point" length="18000" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="unloading station point --- working station point" sourcePoint="unloading station point" destinationPoint="working station point" length="12806" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <path name="working station point --- loading station point" sourcePoint="working station point" destinationPoint="loading station point" length="11314" maxVelocity="1000" maxReverseVelocity="0" locked="false">
+        <pathLayout connectionType="DIRECT" layerId="0"/>
+    </path>
+    <vehicle name="Vehicle-0001" length="1000" energyLevelCritical="30" energyLevelGood="90" energyLevelFullyRecharged="30" energyLevelSufficientlyRecharged="90" maxVelocity="1000" maxReverseVelocity="1000">
+        <vehicleLayout color="#FF0000"/>
+    </vehicle>
+    <vehicle name="Vehicle-0002" length="1000" energyLevelCritical="30" energyLevelGood="90" energyLevelFullyRecharged="30" energyLevelSufficientlyRecharged="90" maxVelocity="1000" maxReverseVelocity="1000">
+        <vehicleLayout color="#0000FF"/>
+    </vehicle>
+    <locationType name="LType-0001">
+        <allowedOperation name="Drill"/>
+        <allowedOperation name="cut"/>
+        <allowedOperation name="load"/>
+        <property name="tcs:defaultLocationTypeSymbol" value="NONE"/>
+        <locationTypeLayout locationRepresentation="NONE"/>
+    </locationType>
+    <locationType name="LType-0002">
+        <allowedOperation name="Load Cargo"/>
+        <property name="tcs:defaultLocationTypeSymbol" value="NONE"/>
+        <locationTypeLayout locationRepresentation="NONE"/>
+    </locationType>
+    <locationType name="LType-0003">
+        <allowedOperation name="Charge"/>
+        <property name="tcs:defaultLocationTypeSymbol" value="NONE"/>
+        <locationTypeLayout locationRepresentation="NONE"/>
+    </locationType>
+    <locationType name="LType-0004">
+        <allowedOperation name="Unload Cargo"/>
+        <property name="tcs:defaultLocationTypeSymbol" value="NONE"/>
+        <locationTypeLayout locationRepresentation="NONE"/>
+    </locationType>
+    <location name="Charging Station" xPosition="22500" yPosition="500" zPosition="0" locked="false" type="LType-0003">
+        <link point="charging station point"/>
+        <property name="tcs:defaultLocationSymbol" value="DEFAULT"/>
+        <locationLayout xPosition="22750" yPosition="750" xLabelOffset="-10" yLabelOffset="-20" locationRepresentation="DEFAULT" layerId="0"/>
+    </location>
+    <location name="Loading Station" xPosition="8000" yPosition="13500" zPosition="0" locked="false" type="LType-0002">
+        <link point="loading station point"/>
+        <property name="tcs:defaultLocationSymbol" value="DEFAULT"/>
+        <locationLayout xPosition="8000" yPosition="13500" xLabelOffset="-10" yLabelOffset="-20" locationRepresentation="DEFAULT" layerId="0"/>
+    </location>
+    <location name="Unloading station" xPosition="36000" yPosition="14000" zPosition="0" locked="false" type="LType-0004">
+        <link point="unloading station point"/>
+        <property name="tcs:defaultLocationSymbol" value="DEFAULT"/>
+        <locationLayout xPosition="35750" yPosition="13750" xLabelOffset="-10" yLabelOffset="-20" locationRepresentation="DEFAULT" layerId="0"/>
+    </location>
+    <location name="Working Station" xPosition="22500" yPosition="23000" zPosition="0" locked="false" type="LType-0001">
+        <link point="working station point"/>
+        <property name="tcs:defaultLocationSymbol" value="DEFAULT"/>
+        <locationLayout xPosition="22250" yPosition="24750" xLabelOffset="-10" yLabelOffset="-18" locationRepresentation="DEFAULT" layerId="0"/>
+    </location>
+    <visualLayout name="VLayout" scaleX="50.0" scaleY="50.0">
+        <layer id="0" ordinal="0" visible="true" name="Default layer" groupId="0"/>
+        <layerGroup id="0" name="Default layer group" visible="true"/>
+    </visualLayout>
+    <property name="tcs:modelFileLastModified" value="2022-12-08T09:39:23Z"/>
+</model>

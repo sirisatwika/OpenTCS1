@@ -76,11 +76,7 @@ public class ShortestPathPointRouter
       return new ArrayList<>();
     }
 
-    GraphPath<String, Edge> graphPath = algo.getPath(srcPoint.getName(), destPoint.getName());
-    System.out.println("graphpath : " + graphPath);
-    if (graphPath == null) {
-      return null;
-    }
+    
     
     vs =  objectService.fetchObjects(Vehicle.class);
     List<List<String>> allpaths = ag.getpaths(srcPoint.getName(), destPoint.getName());
@@ -128,7 +124,7 @@ public class ShortestPathPointRouter
     
     
     int minindex = 0;
-    int mini = 999;
+    int mini = 99999;
     for(int i = 0;i < lpath.size();i++){
       int y = lpath.get(i);
       if(y < mini){
@@ -139,26 +135,53 @@ public class ShortestPathPointRouter
     System.out.println("minidex" +minindex);
     
     System.out.println("mini" +mini);
-    System.out.println("shortestpath" + accpaths.get(minindex));
-    //System.out.println(lpath.get(minindex));
-    
-   // Integer min = Collections.min(lpath);
-    //System.out.println(min);
-   // List<String> choosepath = accpaths.get(min);
-    //System.out.println(choosepath);
- /* List<String> lpath = accpaths.get(0);
-    for(List<String> path : accpaths ){
-             if(lpath!=null){
-                 if(lpath.size()>path.size()){
-                   lpath = path;
-                 }
-             }
+    List<String>  shotpath = new ArrayList<>();
+    if(mini >= 0 && mini <= accpaths.size()){
+       System.out.println("shortestpath" + accpaths.get(minindex));
+       shotpath = accpaths.get(minindex);
     }
+    System.out.println(shotpath);
     
+    List<Edge> finaledges = new ArrayList<>();
+    if(ag != null){
+      Graph<String, Edge> g = ag.getGraph();
+      System.out.println("getting graph" + g);
+      if(g != null && shotpath != null){
+        if(!shotpath.isEmpty()){
+            for(int i = 0; i < shotpath.size()-1;i++ ){
+              if(g.containsEdge(shotpath.get(i),shotpath.get(i + 1))){
+                Edge e = g.getEdge(shotpath.get(i),shotpath.get(i + 1));
+                finaledges.add(e);
+              }
+            }
+          }
+      } 
+    }
+    System.out.println("finaledges" +finaledges);
+    // Integer min = Collections.min(lpath);
+    //System.out.println(min);
+    // List<String> choosepath = accpaths.get(min);
+    //System.out.println(choosepath);
+    /* List<String> lpath = accpaths.get(0);
+    for(List<String> path : accpaths ){
+        if(lpath!=null){
+            if(lpath.size()>path.size()){
+                lpath = path;
+            }
+        }
+    }
     System.out.println("Shortestpath:\n"+lpath);*/
-
-    List<Route.Step> result = translateToSteps(graphPath);
+    GraphPath<String, Edge> graphPath = algo.getPath(srcPoint.getName(), destPoint.getName());
+    System.out.println("graphpath : " + graphPath);
+    if (graphPath == null) {
+      return null;
+    }
+     
+   // List<Route.Step> result = translateToSteps(graphPath);
     //System.out.println("in sppr" + result);
+    
+     List<Route.Step> result = translateToStepsCustom(finaledges,srcPoint,destPoint);
+     
     LOG.debug("Looking up route from {} to {} took {} milliseconds.",
               srcPoint.getName(),
               destPoint.getName(),
@@ -185,6 +208,30 @@ public class ShortestPathPointRouter
 
     return (long) graphPath.getWeight();
   }
+  
+private List<Route.Step> translateToStepsCustom(List<Edge> edges, Point src, Point dest) {
+    //List<Edge> edges = graphPath.getEdgeList();
+    List<Route.Step> result = new ArrayList<>(edges.size());
+
+    if(!edges.isEmpty()){
+        int routeIndex = 0;
+      for (Edge edge : edges) {
+//        Point sourcePoint = points.get(graphPath.getGraph().getEdgeSource(edge));
+//        Point destPoint = points.get(graphPath.getGraph().getEdgeTarget(edge));
+          
+
+        result.add(new Route.Step(edge.getPath(),
+                                  src,
+                                  dest,
+                                  orientation(edge, src),
+                                  routeIndex));
+        routeIndex++;
+      }
+    }
+    return result;
+   
+  }
+
 
   private List<Route.Step> translateToSteps(GraphPath<String, Edge> graphPath) {
     List<Edge> edges = graphPath.getEdgeList();

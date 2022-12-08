@@ -57,6 +57,10 @@ public class  AllPathAlgorithm  {
 //		adjList=new HashMap<>();
 //	}
 //  
+
+  public Graph<String, Edge> getGraph() {
+    return graph;
+  }
   @SuppressWarnings("unchecked")
   public void addEdge(String u, String v)
     {   
