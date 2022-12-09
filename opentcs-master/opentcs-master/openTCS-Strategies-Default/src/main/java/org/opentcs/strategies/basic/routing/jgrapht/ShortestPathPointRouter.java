@@ -23,6 +23,7 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.opentcs.components.kernel.routing.Edge;
 import org.opentcs.components.kernel.services.TCSObjectService;
 import org.opentcs.data.TCSObjectReference;
+import org.opentcs.data.model.Path;
 import org.opentcs.data.model.Point;
 import org.opentcs.data.model.Vehicle;
 import org.opentcs.data.order.Route;
@@ -75,8 +76,6 @@ public class ShortestPathPointRouter
     if (Objects.equals(srcPoint.getName(), destPoint.getName())) {
       return new ArrayList<>();
     }
-
-    
     
     vs =  objectService.fetchObjects(Vehicle.class);
     List<List<String>> allpaths = ag.getpaths(srcPoint.getName(), destPoint.getName());
@@ -85,9 +84,26 @@ public class ShortestPathPointRouter
     //System.out.println(vs);
     List<String> vpts = new ArrayList<>();
     for(Vehicle tempv : vs){
-      if(tempv.getCurrentPosition().getName().compareTo(srcPoint.getName()) != 0){
-          vpts.add(tempv.getCurrentPosition().getName());
+      
+      if(tempv.getCurrentPosition().getName().compareTo(destPoint.getName()) == 0){
+        GraphPath<String, Edge> graphPath = algo.getPath(srcPoint.getName(), destPoint.getName());
+        System.out.println("graphpath : " + graphPath);
+        if (graphPath == null) {
+          return null;
+        }
+     
+        List<Route.Step> result = translateToSteps(graphPath);
+        return result;
+    
       }
+     
+        if(tempv.getCurrentPosition().getName().compareTo(srcPoint.getName()) != 0){
+
+            vpts.add(tempv.getCurrentPosition().getName());
+        }
+      
+      
+      
     }
    // System.out.println(vpts);
    List<List<String>> accpaths = new ArrayList<>();
@@ -136,15 +152,16 @@ public class ShortestPathPointRouter
     
     System.out.println("mini" +mini);
     List<String>  shotpath = new ArrayList<>();
-    if(mini >= 0 && mini <= accpaths.size()){
+    if(minindex >= 0 && minindex < accpaths.size()){
        System.out.println("shortestpath" + accpaths.get(minindex));
        shotpath = accpaths.get(minindex);
     }
-    System.out.println(shotpath);
+    System.out.println("shotpath " + shotpath);
     
     List<Edge> finaledges = new ArrayList<>();
     if(ag != null){
       Graph<String, Edge> g = ag.getGraph();
+
       System.out.println("getting graph" + g);
       if(g != null && shotpath != null){
         if(!shotpath.isEmpty()){
@@ -154,6 +171,18 @@ public class ShortestPathPointRouter
                 finaledges.add(e);
               }
             }
+          }else{
+          
+        GraphPath<String, Edge> graphPath = algo.getPath(srcPoint.getName(), destPoint.getName());
+        System.out.println("graphpath : " + graphPath);
+        if (graphPath == null) {
+          return null;
+        }
+     
+        List<Route.Step> result = translateToSteps(graphPath);
+        return result;
+    
+      
           }
       } 
     }
@@ -180,12 +209,15 @@ public class ShortestPathPointRouter
    // List<Route.Step> result = translateToSteps(graphPath);
     //System.out.println("in sppr" + result);
     
-     List<Route.Step> result = translateToStepsCustom(finaledges,srcPoint,destPoint);
+     List<Route.Step> result = new ArrayList<>();
+     if(objectService != null){
+    result = translateToStepsCustom(finaledges, objectService );
      
     LOG.debug("Looking up route from {} to {} took {} milliseconds.",
               srcPoint.getName(),
               destPoint.getName(),
               System.currentTimeMillis() - timeBefore);
+     }
 
     return result;
   }
@@ -209,7 +241,7 @@ public class ShortestPathPointRouter
     return (long) graphPath.getWeight();
   }
   
-private List<Route.Step> translateToStepsCustom(List<Edge> edges, Point src, Point dest) {
+private List<Route.Step> translateToStepsCustom(List<Edge> edges,TCSObjectService objectService) {
     //List<Edge> edges = graphPath.getEdgeList();
     List<Route.Step> result = new ArrayList<>(edges.size());
 
@@ -218,14 +250,22 @@ private List<Route.Step> translateToStepsCustom(List<Edge> edges, Point src, Poi
       for (Edge edge : edges) {
 //        Point sourcePoint = points.get(graphPath.getGraph().getEdgeSource(edge));
 //        Point destPoint = points.get(graphPath.getGraph().getEdgeTarget(edge));
-          
+        if(objectService != null){
+          Path p = edge.getPath();
+          if(p != null){
+              Point src = objectService.fetchObject(Point.class, p.getSourcePoint());
+              Point dest = objectService.fetchObject(Point.class, p.getDestinationPoint());
+              if(src != null && dest != null){
+              result.add(new Route.Step(p,
+                                        src,
+                                        dest,
+                                        orientation(edge, src),
+                                        routeIndex));
 
-        result.add(new Route.Step(edge.getPath(),
-                                  src,
-                                  dest,
-                                  orientation(edge, src),
-                                  routeIndex));
-        routeIndex++;
+            }
+              routeIndex++;
+          }
+        }
       }
     }
     return result;
@@ -258,7 +298,4 @@ private List<Route.Step> translateToStepsCustom(List<Edge> edges, Point src, Poi
         ? Vehicle.Orientation.FORWARD
         : Vehicle.Orientation.BACKWARD;
   }
-  
-  
-  
 }
